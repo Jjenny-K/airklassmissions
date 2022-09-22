@@ -28,7 +28,8 @@ Quriously AIR KLASS Python/Django 백엔드 개발자 - 과제 전형
         - [ ]  작성된 질문 내역 삭제
 - Implementation
     - 과제 종료일: 2022년 9월 25일 23:59
-    - [ ]  Python 3 + Django + Django REST Framework 사용
+    - [ ]  Python3 + Django + Django REST Framework 사용
     - [ ]  정상적인 서버 실행 가능하도록 구현
+    - [ ]  원격 서버 배포
     - [ ]  README.md 작성
         - 서버 실행방법, 구현 스펙, 구현 범위, 과제 구현 과정 등
