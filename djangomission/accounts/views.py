@@ -1,12 +1,14 @@
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from accounts.models import User
 from accounts.serializers import UserSignupSerializer, \
                                  UserLoginSerializer, \
                                  UserLogoutSerializer, \
                                  UserSerializer
+from accounts.permissions import IsOwnerOrReadOnly
 
 
 class UserViewset(viewsets.GenericViewSet,
@@ -19,6 +21,8 @@ class UserViewset(viewsets.GenericViewSet,
         로그인 시 access_token, refresh_token 부여, refresh_token 쿠키 저장
         pk값 입력을 통한 사용자 정보 접근
         쿠키 내 refresh_token 제거를 통한 로그아웃
+
+        인증받지 않은 사용자의 경우 사용자 정보 상세조회, 수정, 삭제 접근 불가
     """
 
     queryset = User.objects.all()
@@ -32,6 +36,14 @@ class UserViewset(viewsets.GenericViewSet,
             return UserLogoutSerializer
         else:
             return UserSerializer
+
+    def get_permissions(self):
+        if self.action in ('signup', 'login'):
+            permission_class = (AllowAny,)
+        else:
+            permission_class = (IsOwnerOrReadOnly,)
+
+        return [permission() for permission in permission_class]
 
     @action(methods=['post'], detail=False)
     def signup(self, request):
