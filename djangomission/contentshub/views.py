@@ -2,9 +2,9 @@ from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from contentshub.models import Master
-from contentshub.serializers import MasterSerializer
-from contentshub.permissions import IsMasterOrReadOnly
+from contentshub.models import Master, Klass
+from contentshub.serializers import MasterSerializer, KlassSerializer
+from contentshub.permissions import IsMasterOrReadOnly, KlassIsMasterOrReadOnly
 from accounts.models import User
 
 
@@ -50,3 +50,34 @@ class MasterViewSet(viewsets.ModelViewSet):
         self.queryset = self.get_queryset().filter(query)
 
         return super().list(request, *args, **kwargs)
+
+
+class KlassViewSet(viewsets.ModelViewSet):
+    """
+        로그인된 정보를 통해 강사 정보 등록
+        pk값 입력을 통한 강의 정보 접근
+
+        인증받은 사용자 본인이 강사가 아닐 경우, 강의 등록 불가
+        인증받은 사용자 본인이 생성한 강의가 아닐 경우 강의 정보 상세조회, 수정, 삭제 접근 불가
+    """
+
+    queryset = Klass.objects.all()
+    serializer_class = KlassSerializer
+    permission_classes = (KlassIsMasterOrReadOnly,)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # 로그인된 사용자 정보를 통해 Klass 틍록
+            master = Master.objects.get(user=request.user)
+
+            Klass.objects.create(
+                master_id=master.id,
+                title=request.data['title'],
+                description=request.data['description'],
+            )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

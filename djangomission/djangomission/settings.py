@@ -157,7 +157,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'DATETIME_FORMAT': '%Y-%m-%d %A'
 }
 
 REST_USE_JWT = True
