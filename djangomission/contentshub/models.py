@@ -4,7 +4,7 @@ from utils.timestamp import TimestampZone
 
 
 class Master(TimestampZone):
-    user = models.ForeignKey('accounts.User', verbose_name='강사 신청자', on_delete=models.CASCADE)
+    user = models.OneToOneField('accounts.User', verbose_name='강사 신청자', on_delete=models.CASCADE)
     name = models.CharField(verbose_name='강사 이름', max_length=10)
     description = models.TextField(verbose_name='강사 소개', blank=True, default='')
 
