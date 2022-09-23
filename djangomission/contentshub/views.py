@@ -24,19 +24,23 @@ class MasterViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
-            # 로그인된 사용자 정보를 추가해 Master 틍록
-            Master.objects.create(
-                user_id=request.user.id,
-                name=request.data['name'],
-                description=request.data['description'],
-            )
+            try:
+                # 로그인된 사용자 정보를 추가해 Master 틍록
+                Master.objects.create(
+                    user_id=request.user.id,
+                    name=request.data['name'],
+                    description=request.data['description'],
+                )
+            except:
+                # 입력된 데이터에 해당하는 사용자가 강사로 등록되어 있을 경우 예외처리
+                return Response({'message': '이미 등록된 강사입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                # 해당 사용자의 is_master를 True로 지정해 강사 여부 업데이트
+                user = User.objects.get(id=request.user.id)
+                user.is_master = True
+                user.save(update_fields=['is_master'])
 
-            # 해당 사용자의 is_master를 True로 지정해 강사 여부 업데이트
-            user = User.objects.get(id=request.user.id)
-            user.is_master = True
-            user.save(update_fields=['is_master'])
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
