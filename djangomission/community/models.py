@@ -17,7 +17,7 @@ class Question(TimestampZone):
 
 
 class Answer(TimestampZone):
-    question = models.ForeignKey('community.Question', verbose_name='질문', on_delete=models.CASCADE)
+    question = models.OneToOneField('community.Question', verbose_name='질문', on_delete=models.CASCADE)
     contents = models.TextField(verbose_name='답변 상세')
 
     class Meta:
