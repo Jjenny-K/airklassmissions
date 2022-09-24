@@ -5,7 +5,7 @@ from utils.timestamp import TimestampZone
 
 class Question(TimestampZone):
     user = models.ForeignKey('accounts.User', verbose_name='작성자', on_delete=models.CASCADE)
-    klass = models.ForeignKey('contentshub.Klass', verbose_name='강의', on_delete=models.CASCADE)
+    klass = models.ForeignKey('contentshub.Klass', verbose_name='강의', on_delete=models.CASCADE, related_name='questions')
     contents = models.TextField(verbose_name='질문 상세')
 
     class Meta:

@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from contentshub.models import Master, Klass
-from contentshub.serializers import MasterSerializer, KlassSerializer
+from contentshub.serializers import MasterSerializer, KlassSerializer, KlassListSerializer
 from contentshub.permissions import IsMasterOrReadOnly, KlassIsMasterOrReadOnly
 from accounts.models import User
 
@@ -62,7 +62,13 @@ class KlassViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Klass.objects.all()
-    serializer_class = KlassSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return KlassListSerializer
+        else:
+            return KlassSerializer
+
     permission_classes = (KlassIsMasterOrReadOnly,)
 
     def create(self, request, *args, **kwargs):
