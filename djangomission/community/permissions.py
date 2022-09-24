@@ -1,4 +1,9 @@
+import re
+
 from rest_framework import permissions
+
+from contentshub.models import Klass
+from community.models import Question
 
 
 class QuestionIsOwnerOrReadOnly(permissions.BasePermission):
@@ -20,3 +25,21 @@ class QuestionIsOwnerOrReadOnly(permissions.BasePermission):
                 return False
 
         return False
+
+
+class AnswerIsMasterOrReadOnly(permissions.BasePermission):
+    """
+        인증받은 사용자 본인이 등록한 강의가 아닐 경우 권한 제한
+    """
+
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.COOKIES.get('refresh_token') and request.user.is_master:
+            klass_list = Klass.objects.filter(master__user_id=request.user.id)
+            question = Question.objects.get(id=re.sub(r'[^0-9]', '', request.path))
+
+            if question.klass in klass_list:
+                return True
+            else:
+                return False
+        else:
+            return False

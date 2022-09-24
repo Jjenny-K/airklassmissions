@@ -55,3 +55,20 @@ class QuestionSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'created_at',
         )
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    klass_title = serializers.ReadOnlyField(source='question.klass.title')
+    question = serializers.ReadOnlyField(source='question.contents')
+
+    class Meta:
+        model = Answer
+        fields = (
+            'klass_title',
+            'question',
+            'contents',
+            'created_at',
+        )
+        read_only_fields = (
+            'created_at',
+        )
