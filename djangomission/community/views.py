@@ -9,15 +9,19 @@ from community.serializers import QuestionCreateSerializer, \
                                   QuestionListSerializer, \
                                   QuestionSerializer, \
                                   AnswerSerializer
-from community.permissions import QuestionIsOwnerOrReadOnly, AnswerIsMasterOrReadOnly
+from community.permissions import QuestionIsOwnerOrReadOnly, \
+                                  QuestionDestroyIsOwnerIsMaster, \
+                                  AnswerIsMasterOrReadOnly
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
     """
         로그인된 정보를 통해 사용자 정보 등록
         pk값 입력을 통한 질문 정보 접근
+        답변이 등록된 질문의 경우 삭제 불가
 
-        인증받은 사용자의 본인이 작성한 질문이 아닐 경우 질문 조회, 수정, 삭제 접근 불가
+        인증받은 사용자 본인이 작성한 질문이 아닐 경우 질문 조회, 수정 접근 불가
+        인증받은 사용자 본인이 작성한 질문이 아닐 경우, 질문이 작성된 강의의 강사가 아닐 경우 삭제 접근 불가
     """
 
     def get_queryset(self):
@@ -39,10 +43,15 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'answers':
             permission_classes = (AnswerIsMasterOrReadOnly,)
+        elif self.action == 'destroy':
+            permission_classes = (QuestionDestroyIsOwnerIsMaster,)
         else:
             permission_classes = (QuestionIsOwnerOrReadOnly,)
 
         return [permission() for permission in permission_classes]
+
+    def get_answer(self, pk):
+        return get_object_or_404(Answer, question_id=pk)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -66,8 +75,17 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
         return super().list(request, *args, **kwargs)
 
-    def get_answer(self, pk):
-        return get_object_or_404(Answer, question_id=pk)
+    def destroy(self, request, *args, **kwargs):
+        question = self.get_object()
+
+        try:
+            self.get_answer(question.id)
+        except:
+            # 입력된 데이터에 해당하는 질문에 답변이 등롣되어 있지 않은 경우 삭제
+            return super().destroy(request, *args, **kwargs)
+        else:
+            # 입력된 데이터에 해당하는 질문에 답변이 등록되어 있는 경우 예외처리
+            return Response({'message': '답변이 등록된 질문은 삭제할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['get', 'post', 'delete'], detail=True)
     def answers(self, request, pk, *args, **kwargs):
