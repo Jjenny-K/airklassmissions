@@ -1,0 +1,34 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: djangomission_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static-data:/static
+    depends_on:
+      - web
+    networks:
+      - subnet
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: djangomission_web
+    env_file:
+      - ./.env
+    volumes:
+      - static-data:/djangomission/static
+    restart: always
+    networks:
+      - subnet
+
+volumes:
+  static-data:
+
+networks:
+  subnet:
+    driver: bridge
