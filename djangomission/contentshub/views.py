@@ -13,7 +13,7 @@ class MasterViewSet(viewsets.ModelViewSet):
         로그인된 정보를 통해 사용자 정보 등록
         pk값 입력을 통한 강사 정보 접근
 
-        인증받은 사용자의 본인의 정보가 아닐 경우 강사 정보 접근 불가
+        인증받은 사용자 본인의 정보가 아닐 경우 강사 정보 접근 불가
     """
 
     queryset = Master.objects.all()
@@ -58,7 +58,7 @@ class KlassViewSet(viewsets.ModelViewSet):
         pk값 입력을 통한 강의 정보 접근
 
         인증받은 사용자 본인이 강사가 아닐 경우, 강의 등록 불가
-        인증받은 사용자 본인이 생성한 강의가 아닐 경우 강의 정보 상세조회, 수정, 삭제 접근 불가
+        인증받은 사용자 본인이 생성한 강의가 아닐 경우 강의 정보 수정, 삭제 접근 불가
     """
 
     queryset = Klass.objects.all()

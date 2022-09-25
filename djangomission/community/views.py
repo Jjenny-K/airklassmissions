@@ -25,7 +25,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        if self.action == 'answers':
+        if self.action == 'answer':
             return Answer.objects.all()
         else:
             return Question.objects.all()
@@ -35,13 +35,13 @@ class QuestionViewSet(viewsets.ModelViewSet):
             return QuestionCreateSerializer
         elif self.action == 'list':
             return QuestionListSerializer
-        elif self.action == 'answers':
+        elif self.action == 'answer':
             return AnswerSerializer
         else:
             return QuestionSerializer
 
     def get_permissions(self):
-        if self.action == 'answers':
+        if self.action == 'answer':
             permission_classes = (AnswerIsMasterOrReadOnly,)
         elif self.action == 'destroy':
             permission_classes = (QuestionDestroyIsOwnerIsMaster,)
@@ -88,11 +88,11 @@ class QuestionViewSet(viewsets.ModelViewSet):
             return Response({'message': '답변이 등록된 질문은 삭제할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['get', 'post', 'delete'], detail=True)
-    def answers(self, request, pk, *args, **kwargs):
+    def answer(self, request, pk, *args, **kwargs):
         """
-            pk값을 통해 답변 정보 등록
+            pk값을 통해 질문 정보 등록
 
-            인증받은 사용자의 본인이 등록한 강의의 질문이 아닐 경우 답변 정보 접근 불가
+            인증받은 사용자 본인이 등록한 강의의 질문이 아닐 경우 답변 정보 접근 불가
         """
         if request.method == 'GET':
             return super().list(request, *args, **kwargs)

@@ -35,7 +35,8 @@ class QuestionDestroyIsOwnerIsMaster(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated and request.COOKIES.get('refresh_token'):
             if hasattr(obj.user, 'email'):
-                return (obj.user.email == request.user.email) or (obj.klass.master.user.email == request.user.email)
+                return (obj.user.email == request.user.email) \
+                       or (obj.klass.master.user.email == request.user.email)
             else:
                 return False
 

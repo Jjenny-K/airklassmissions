@@ -26,7 +26,7 @@ class KlassIsMasterOrReadOnly(permissions.BasePermission):
     """
         강의 조회는 모든 사용자에게 허용
         인증받은 사용자 본인이 강사가 아닐 경우 강의 등록 제한
-        인증받은 사용자 본인이 등록한 강의가 아닐 경우 삭제, 수정 제한
+        인증받은 사용자 본인이 등록한 강의가 아닐 경우 수정, 삭제 제한
     """
 
     def has_permission(self, request, view):
