@@ -51,6 +51,14 @@ class MasterViewSet(viewsets.ModelViewSet):
 
         return super().list(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+        # 해당 사용자의 is_master를 False로 지정해 강사 여부 업데이트
+        user = User.objects.get(id=request.user.id)
+        user.is_master = False
+        user.save(update_fields=['is_master'])
+
+        return super().destroy(request, *args, **kwargs)
+
 
 class KlassViewSet(viewsets.ModelViewSet):
     """
