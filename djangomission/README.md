@@ -1,9 +1,9 @@
 # airklassmissions
 Quriously AIR KLASS Python/Django 백엔드 개발자 - 과제 전형
 
-### 배포 주소 [GoTo](http://43.200.14.209/api/users/signup)
+### 배포 주소 ~~[GoTo]~~ ▶ 현재 비용 문제로 인해 내려둔 상태입니다.
 
-### 진행사항 확인 [GoTo](https://round-locust-fc4.notion.site/airklassmissions-ef8c550fbcac42e2a4d64dbfb063b9d0)
+### 진행사항 확인 ~~[GoTo]~~
 - 요구사항 분석, 관련 정보 및 프로젝트 상세 진행사항 기록을 위해 사용
 
 ## 과제 해석
@@ -62,7 +62,7 @@ Quriously AIR KLASS Python/Django 백엔드 개발자 - 과제 전형
 <img src="./source/erd.png" alt="erd">
 
 > ### API 명세서
-### [GoTo](https://documenter.getpostman.com/view/20879074/2s83RyDuVk)
+### ~~[GoTo]~~
 
 > ### 구현 과정
 - ViewSet을 이용한 RESTful API 구현
