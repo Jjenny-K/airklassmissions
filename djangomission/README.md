@@ -117,13 +117,13 @@ $ cd djangomission
 
 3. .env 파일을 root directory에 생성 후, 프로젝트와 연동을 위한 정보를 저장합니다.
 ```
-SECRET_KEY='[SECRET_KEY]'
+SECRET_KEY='{SECRET_KEY}'
 ```
 
 4. 가상환경을 설정한 후 필요한 라이브러리를 설치합니다.
 ```shell
 $ python -m venv venv
-$ venv/Scripts/activate
+$ venv\Scripts\activate
 $ python install -r requirements.txt
 ```
 
@@ -151,7 +151,7 @@ $ cd djangomission
 
 3. .env 파일을 root directory에 생성 후, 프로젝트와 연동을 위한 정보를 저장합니다.
 ```
-SECRET_KEY='[SECRET_KEY]'
+SECRET_KEY='{SECRET_KEY}'
 ```
 
 4. nginx/conf.d/default/conf 파일 내 server_name을 배포용 ip로 변경합니다.
